@@ -2,6 +2,7 @@
 const program = require('commander');
 const Papa = require('papaparse')
 const fs = require('fs')
+const path = require('path')
 const JSZip = require('jszip')
 const pMap = require('p-map')
 const _ = require('lodash')
@@ -16,6 +17,8 @@ if(!program.csv || !program.zip) {
   console.log('require --csv and --zip option');
   return 1
 }
+
+let fileName = path.parse(program.csv).name;
 
 (async ()=>{
 
@@ -73,16 +76,16 @@ if(!program.csv || !program.zip) {
     .map(index=>[titleObj[index],index])
     .filter(([v])=>v)
     .forEach(([v,index])=>{
-      console.log(`${dir}/${index}.txt`,'title ' + v)
-      fs.appendFileSync(`${dir}/${index}.txt`,`title ${v}\n`)
+      console.log(`${dir}/${fileName}-${index}.txt`,`title ${v}\n`)
+      fs.appendFileSync(`${dir}/${fileName}-${index}.txt`,`title ${v}\n`)
     })
 
   maybeBodyPages
     .map(index=>[bodyObj[index],index])
     .filter(([v])=>v)
     .forEach(([v,index])=>{
-      console.log(`${dir}/${index}.txt`,'body ' + v)
-      fs.appendFileSync(`${dir}/${index}.txt`,`body ${v}\n`)
+      console.log(`${dir}/${fileName}-${index}.txt`,`body ${v}\n`)
+      fs.appendFileSync(`${dir}/${fileName}-${index}.txt`,`body ${v}\n`)
     })
 })();
 
