@@ -10,8 +10,10 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.19.0",
+    "jimp": "^0.6.0",
     "jszip": "^3.2.0",
     "lodash": "^4.17.11",
+    "lodash.product": "^18.9.19",
     "p-map": "^2.0.0",
     "papaparse": "^4.6.3"
   }
