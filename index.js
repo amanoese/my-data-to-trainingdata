@@ -103,23 +103,24 @@ let fileName = path.parse(program.csv).name;
 
     await negativePages.map(index=>{
       console.log(`${ndir}/${pdfName}-${index}.txt`)
-      return fsPromises.appendFile(`${ndir}/${pdfName}-${index}.txt`)
+      return fsPromises.appendFile(`${ndir}/${pdfName}-${index}.txt`,'')
     })
 
     let pdfImage = new PDFImage(program.pdf, {
       convertExtension : 'png',
+      outputDirectory: '/tmp/',
       convertOptions: {
-        "-flatten": "",
-        "-filter": "lanczos",
-        "-quality": "100"
+        '-flatten': '',
+        '-filter': 'lanczos',
+        '-quality': '100'
       }
     });
+    console.log(pdfImage)
 
     let convertTasks = _.range(0,_.max(maybeBodyPages)).map(pageIndex=>{
       return pLimit4(async () => {
       // 0-th page (first page) of the slide.pdf is available as slide-0.png
         let imagePath = await pdfImage.convertPage(pageIndex)
-        console.log(imagePath)
         let {name,ext} = path.parse(imagePath);
         let outPath = imageDir + '/' + name.replace(/-(\d+)$/,(_,num)=>`-${+num+1}${ext}`);
         await fsPromises.writeFile(outPath,await fsPromises.readFile(imagePath))

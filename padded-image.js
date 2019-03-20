@@ -21,13 +21,13 @@ program.args.forEach(async imgPath=>{
 
   let img = await jimp.read(imgPath)
 
-  let gaussianParams = _.range(1,4)
-  let brightnessParams = _.range(-20,20,10).map(v=>v/100)
-  let contrastParams = _.range(-20,20,10).map(v=>v/100)
+  let gaussianParams = _.range(1,3)
+  let brightnessParams = _.range(-20,20,20).map(v=>v/100)
+  let contrastParams = _.range(-20,20,20).map(v=>v/100)
 
   _.product(gaussianParams,brightnessParams,contrastParams).forEach(([a,b,c],i)=>{
     setTimeout(()=>{
-      img.clone().gaussian(a).brightness(b).contrast(c).writeAsync(`img-data/${imgName}-${i}.png`)
+      img.clone().gaussian(a).brightness(b).contrast(c).writeAsync(`pad-data/${imgName}-${i}.png`)
     });
   })
 })

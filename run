@@ -1,1 +1,4 @@
-node index.js -c A1ブロードバンドルータGW_C.csv  -z A1ブロードバンドルータGW.zip -p A1ブロードバンドルータGW.pdf
+node index.js -p A1_無線アクセスポイント.pdf -z A1_無線アクセスポイント.zip -c A1_無線アクセスポイント_C.csv
+node index.js -p A1デジタルコードレス.pdf -z A1デジタルコードレス.zip -c A1デジタルコードレス_C.csv
+node index.js -p A1ブロードバンドルータGW.pdf -z A1ブロードバンドルータGW.zip -c A1ブロードバンドルータGW_C.csv
+node index.js -p A1音声メールGW.pdf -z A1音声メールGW.zip -c A1音声メールGW_C.csv
