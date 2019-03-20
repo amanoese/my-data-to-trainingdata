@@ -26,6 +26,7 @@ if(!program.csv || !program.zip || !program.pdf) {
   return 1
 }
 
+let pdfName = path.parse(program.pdf).name
 let fileName = path.parse(program.csv).name;
 
 (async ()=>{
@@ -74,7 +75,7 @@ let fileName = path.parse(program.csv).name;
 
   // merge
 
-  let dir = './setting';
+  let dir = './positive-setting';
   let ndir = './negative-setting';
   let imageDir = './images';
 
@@ -86,30 +87,30 @@ let fileName = path.parse(program.csv).name;
     .map(index=>[titleObj[index],index])
     .filter(([v])=>v)
     .map(([v,index])=>{
-      console.log(`${dir}/${fileName}-${index}.txt`,`title ${v}`)
-      return fsPromises.appendFile(`${dir}/${fileName}-${index}.txt`,`title ${v}\n`)
+      console.log(`${dir}/${pdfName}-${index}.txt`,`title ${v}`)
+      return fsPromises.appendFile(`${dir}/${pdfName}-${index}.txt`,`title ${v}\n`)
     })
 
   await maybeBodyPages
     .map(index=>[bodyObj[index],index])
     .filter(([v])=>v)
     .map(([v,index])=>{
-      console.log(`${dir}/${fileName}-${index}.txt`,`body ${v}`)
-      return fsPromises.appendFile(`${dir}/${fileName}-${index}.txt`,`body ${v}\n`)
+      console.log(`${dir}/${pdfName}-${index}.txt`,`body ${v}`)
+      return fsPromises.appendFile(`${dir}/${pdfName}-${index}.txt`,`body ${v}\n`)
     })
 
     let negativePages = _.difference(_.range(1,_.max(maybeBodyPages)),maybeBodyPages)
 
     await negativePages.map(index=>{
-      console.log(`${ndir}/${fileName}-${index}.txt`)
-      return fsPromises.appendFile(`${ndir}/${fileName}-${index}.txt`)
+      console.log(`${ndir}/${pdfName}-${index}.txt`)
+      return fsPromises.appendFile(`${ndir}/${pdfName}-${index}.txt`)
     })
 
     let pdfImage = new PDFImage(program.pdf, {
-      convertExtension : 'jpg',
+      convertExtension : 'png',
       convertOptions: {
-        "-density": 400,
-        "-resize": "100%",
+        "-flatten": "",
+        "-filter": "lanczos",
         "-quality": "100"
       }
     });
@@ -118,6 +119,7 @@ let fileName = path.parse(program.csv).name;
       return pLimit4(async () => {
       // 0-th page (first page) of the slide.pdf is available as slide-0.png
         let imagePath = await pdfImage.convertPage(pageIndex)
+        console.log(imagePath)
         let {name,ext} = path.parse(imagePath);
         let outPath = imageDir + '/' + name.replace(/-(\d+)$/,(_,num)=>`-${+num+1}${ext}`);
         await fsPromises.writeFile(outPath,await fsPromises.readFile(imagePath))
